@@ -11,6 +11,7 @@
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">Query</el-button>
+            <el-button type="success" @click="getAllDataList()">All</el-button>
             <el-button v-if="isAuth('product:attrgroup:save')" type="primary" @click="addOrUpdateHandle()">Add
             </el-button>
             <el-button v-if="isAuth('product:attrgroup:delete')" type="danger" @click="deleteHandle()"
@@ -73,6 +74,7 @@
             width="150"
             label="operation">
             <template slot-scope="scope">
+              <el-button type="text" size="small" @click="relationHandle(scope.row.attrGroupId)">Association</el-button>
               <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.attrGroupId)">Update</el-button>
               <el-button type="text" size="small" @click="deleteHandle(scope.row.attrGroupId)">Delete</el-button>
             </template>
@@ -89,6 +91,8 @@
         </el-pagination>
         <!-- 弹窗, 新增 / 修改 -->
         <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+
+        <relation-update v-if="relationVisible" ref="relationUpdate" @refreshData="getDataList"></relation-update>
       </div>
     </el-col>
   </el-row>
@@ -98,9 +102,10 @@
 
 import Category from '../common/category.vue'
 import AddOrUpdate from './attrgroup-add-or-update'
+import RelationUpdate from "./attr-group-relation";
 
 export default {
-  components: {Category: Category, AddOrUpdate: AddOrUpdate},
+  components: {Category: Category, AddOrUpdate: AddOrUpdate, RelationUpdate: RelationUpdate},
   props: {},
   data() {
     return {
@@ -114,10 +119,18 @@ export default {
       totalPage: 0,
       dataListLoading: false,
       dataListSelections: [],
-      addOrUpdateVisible: false
+      addOrUpdateVisible: false,
+      relationVisible: false
     }
   },
   methods: {
+    //处理分组与属性的关联
+    relationHandle(groupId) {
+      this.relationVisible = true;
+      this.$nextTick(() => {
+        this.$refs.relationUpdate.init(groupId);
+      });
+    },
     // Aware the node of tree has been clicked
     treeNodeClick(data, node, component) {
       console.log("attrgroup aware categories have been clicked", data, node, component);
@@ -126,6 +139,10 @@ export default {
         this.catId = data.catId;
         this.getDataList();
       }
+    },
+    getAllDataList(){
+      this.catId = 0;
+      this.getDataList();
     },
     // 获取数据列表
     getDataList() {

@@ -212,8 +212,6 @@ export default {
         this.expandedKey = [this.category.parentCid]
       });
     },
-
-
     batchSave() {
       this.$http({
         url: this.$http.adornUrl("/product/category/update/batch"),

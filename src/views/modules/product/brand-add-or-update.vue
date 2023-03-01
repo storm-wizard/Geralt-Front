@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
-             label-width="120px">
+             label-width="140px">
       <el-form-item label="name" prop="name">
         <el-input v-model="dataForm.name" placeholder="brand name"></el-input>
       </el-form-item>

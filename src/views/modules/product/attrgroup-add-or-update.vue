@@ -6,7 +6,7 @@
     @closed="dialogClose"
   >
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
-             label-width="80px">
+             label-width="120px">
       <el-form-item label="attr_group_name" prop="attrGroupName">
         <el-input v-model="dataForm.attrGroupName" placeholder=""></el-input>
       </el-form-item>
@@ -21,12 +21,14 @@
       </el-form-item>
       <el-form-item label="catelog_id" prop="catelogId">
         <!--<el-input v-model="dataForm.catelogId" placeholder=""></el-input>-->
-        <el-cascader
-          v-model="dataForm.catelogPath"
-          :options="categories"
-          :props="props"
-          filterable
-        placeholder="please try to type for search"></el-cascader>
+        <!--        <el-cascader-->
+        <!--          v-model="dataForm.catelogPath"-->
+        <!--          :options="categories"-->
+        <!--          :props="props"-->
+        <!--          filterable-->
+        <!--        placeholder="please try to type for search"></el-cascader>-->
+
+        <category-cascader :catelogPath.sync="catelogPath"></category-cascader>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -37,6 +39,8 @@
 </template>
 
 <script>
+import CategoryCascader from '../common/category-cascader'
+
 export default {
   data() {
     return {
@@ -149,6 +153,9 @@ export default {
   },
   created() {
     this.getCategories();
+  },
+  components: {
+    CategoryCascader:CategoryCascader
   }
 }
 </script>
